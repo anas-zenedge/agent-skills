@@ -93,6 +93,10 @@ Skip a gate only when the user's latest message names that gate ("don't commit",
 
 Not a named skip: a deadline, "don't stall", "skip the ceremony", "one-liner", "you know the codebase", "don't bother me", a senior's suggestion, a reporter saying "make a reasonable call."
 
+### Follow-up issues
+
+Filing any issue during the run (a plan task, a review finding, an out-of-scope bug): **REQUIRED SUB-SKILL:** filing-follow-up-issues, before the create command.
+
 ## Overrides
 
 When this skill applies and the understand gate passes, these do not apply:
