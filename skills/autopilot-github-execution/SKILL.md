@@ -70,7 +70,7 @@ Run every step, including for a one-line change. Documents may be short. Gates m
 
 1. **Isolate.** **REQUIRED SUB-SKILL:** superpowers:using-git-worktrees. Do not implement on the default branch.
 2. **Design.** **REQUIRED SUB-SKILL:** superpowers:brainstorming for the design and spec file only. Do not ask the user. Do not offer a visual companion. Do not wait for user approval.
-3. **Spec decision and review.** Dispatch a fresh general-purpose subagent requiring the most capable highest-reasoning tier. See Model for how to select it. It decides open design choices and returns only APPROVE or BLOCK. BLOCK for a missing product rule → stop message. BLOCK for a design defect → revise and re-review. No self-approval.
+3. **Spec decision and review.** Dispatch a fresh general-purpose subagent on the most capable model (see Model). It decides open design choices and returns only APPROVE or BLOCK. BLOCK for a missing product rule → stop message. BLOCK for a design defect → revise and re-review. No self-approval.
 4. **Plan.** **REQUIRED SUB-SKILL:** superpowers:writing-plans. Do not offer an execution choice.
 5. **Plan decision and review.** Fresh highest-reasoning subagent. Same APPROVE or BLOCK rule. Then implement. Do not ask which executor to use.
 6. **Implement.** **REQUIRED SUB-SKILL:** superpowers:subagent-driven-development. The controller does not write the product code. Implementers use superpowers:test-driven-development.
@@ -79,9 +79,12 @@ Run every step, including for a one-line change. Documents may be short. Gates m
 
 ### Model
 
-Spec verdict, plan verdict, and final branch review need the most capable, highest-reasoning tier. State that as a requirement in the dispatch prompt.
+Name the model on every subagent dispatch. A dispatch without one inherits the controller's model, so every subagent runs on the most expensive tier.
 
-If your harness auto-routes subagent models (for example Kilo's `kilo/auto`), do not name or configure a model: leave the task tool's `model`, `provider`, and `variant` fields unset so the router selects. Hard-picking a model bypasses the router. If your harness does not auto-route, select its most capable model for these three. Always dispatch a general-purpose subagent, never a read-only explore or search agent, for these three. Record the model that actually ran from the task result. Do not claim a higher model ran. Do not downgrade these three to save time. Implementation tasks follow subagent-driven-development's model rules.
+- **Spec verdict, plan verdict, and final branch review:** the most capable model. Also state in the dispatch prompt that the task needs the deepest reasoning. Always dispatch a general-purpose subagent, never a read-only explore or search agent, for these three. Do not downgrade these three to save time.
+- **Every other dispatch** (implementation, fixes, re-reviews, searches, builds, test runs): follow subagent-driven-development's Model Selection. Pick the cheapest model that is reliable for the task.
+
+Record the model that actually ran from the task result. Do not claim a higher model ran.
 
 ### Named skip
 
@@ -144,7 +147,7 @@ Confirm the change is committed before this message. Present every subagent deci
 | The user's sentence is enough | Unread comments are an unread issue. |
 | I'll note that I skipped SDD | Noting a skip is not permission. Run the step. |
 | "Don't use subagents" doesn't name spec review | A subagent ban names every subagent gate. Do not dispatch one anyway. |
-| Set the task model to be sure it is capable | Under an auto-router, naming a model bypasses it. State the requirement; leave model, provider, and variant unset. |
+| Leave the model unset, the default is fine | Unset inherits the controller's model. Name it: most capable for the three verdicts, cheapest reliable for the rest. |
 
 ## Red flags
 
@@ -158,7 +161,8 @@ STOP and return to the gate you skipped:
 - Push, PR, or merge after ready for PR
 - Ceremony, one-liner, don't stall, skip the ceremony
 - "No subagents" followed by a spec, plan, or branch-review dispatch
-- A named model, provider, or variant on a spec, plan, or branch-review dispatch under an auto-router
+- A subagent dispatch with no model named
+- A spec, plan, or branch-review dispatch on less than the most capable model
 
 ## Common mistakes
 
