@@ -1,6 +1,6 @@
 # agent-skills
 
-Reusable skills for AI coding agents (Claude Code, Kilo Code, Codex, and other harnesses that load `SKILL.md` files).
+Reusable skills for AI coding agents (Claude Code, Codex, and other harnesses that load `SKILL.md` files).
 
 ## Skills
 
